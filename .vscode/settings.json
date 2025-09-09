@@ -36,6 +36,22 @@
     "[c]"  : { "editor.defaultFormatter" : "xaver.clang-format" },
     "[cpp]": { "editor.defaultFormatter" : "xaver.clang-format" },
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "C_Cpp.files.exclude": { "ref":true },
+    // "C_Cpp.intelliSenseEngine": "Tag Parser",
+
+    // CMake
+    "cmake.sourceDirectory" : "${workspaceFolder}",
+    "cmake.buildDirectory"  : "${workspaceFolder}/tmp/${workspaceFolderBasename}",
+    "cmake.generator"       : "Unix Makefiles",
+    "cmake.parallelJobs"    :  2,
+    "cmake.useCMakePresets" : "always",
+    "cmake.buildBeforeRun"  :  true,
+    "cmake.saveBeforeBuild" :  true,
+    "cmake.debugConfig"     : {
+        "cwd" :   "${workspaceFolder}",
+        "args": [ "lib/${workspaceFolderBasename}.ini" ] },
+    "cmake.allowCommentsInPresetsFile" : true,
+    "cmake.ignoreCMakeListsMissing"    : true,
 
     // MinGW/MSYS2
     "terminal.integrated.defaultProfile.windows": "UCRT64",
