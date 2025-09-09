@@ -16,6 +16,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <map>
 #include <string>
@@ -46,18 +47,38 @@ typedef int32_t cell;
 extern byte M[Msz];  ///< main memory
 extern addr Cp;      ///< @ref compiler pointer
 extern addr Ip;      ///< instruction pointer
+
+/// bytecode header
+struct Header {
+    byte magic[4];  ///< magic number: `bcx\0`
+    addr entry;     ///< program entry point
+    addr latest;    ///< last word in vocabulary
+    addr heap;      ///< @ref Cp value
+};
+
+/// ( -- ) dump @ref vm registers into @ref Header (before bytecode save)
+extern void sync_();
+/// ( -- ) save @ref vm state into bytecode file
+extern void save();
+
 /// @}
 
 /// @name return stack
 /// @{
 extern addr R[Rsz];  ///< @ref call / @ref ret return stack
 extern byte Rp;      ///< @ref R pointer
+
+extern void rpush(addr a);  ///< `(R: -- a )`
+extern addr rpop();         ///< `(R: a -- )`
 /// @}
 
 /// @name data stack
 /// @{
 extern cell D[Dsz];  ///< data stack
 extern byte Dp;      ///< @ref D pointer
+
+extern void push(cell n);  ///< `( -- n )`
+extern cell pop();         ///< `( n -- )`
 /// @}
 
 /// @}
@@ -74,6 +95,11 @@ extern bool trace;
 /// @defgroup command command
 /// @ingroup vm
 /// @{
+
+/// initialize @ref vm
+/// @param[in] argc number of system startup parameters
+/// @param[in] argv system parameters ( = command line or boot arguments)
+extern void init(int argc, char *argv[]);
 
 /// @ref command opcode
 enum class Op {
@@ -96,13 +122,18 @@ enum class Op {
     pick,
     depth,
 
-    add = 0x20,  ///< `( a b -- a+b )`
+    fetch = 0x20,
+
+    add = 0x30,  ///< `( a b -- a+b )`
     sub,         ///< `( a b -- a-b )`
     mul,         ///< `( a b -- a*b )`
     div,         ///< `( a b -- a/b )`
 
-    key = 0x30,  ///< `( -- char )` @ref key
+    key = 0x40,  ///< `( -- char )` @ref key
     emit,        ///< `( char -- )` @ref emit
+
+    sync = 0x80,  ///< `( -- )` @ref sync_
+    save,         ///< `( -- )` @ref save
 };
 
 /// @name flow control
@@ -133,11 +164,6 @@ extern void lita();
 extern void litb();
 
 /// @name stack manipulation
-
-/// `( -- c)`
-extern void push(cell c);
-/// `( c -- )`
-extern cell pop();
 
 /// `( a -- a a )` duplicate top of stack
 extern void dup();

@@ -11,7 +11,7 @@
 %%
 syntax : | syntax ex
 
-ex: COLON ID        { fprintf(stderr,"%.4X %s\n",Cp,$2->c_str());
+ex: COLON ID        { if (trace) fprintf(stderr,"%.4X:\t%s\n",Cp,$2->c_str());
                         label[*$2]=Cp; Ip=Cp; }
   | CMD0            { compile($1); }
   | CMDB INT        { compile($1); compile((byte)$2); }
