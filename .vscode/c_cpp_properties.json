@@ -1,0 +1,29 @@
+{
+    "version": 4,
+    "env": {
+        "appInclude": [
+            "${workspaceFolder}/inc/**",
+            "${workspaceFolder}/tmp/**",
+            "${workspaceFolder}/src/**",
+        ],
+        "crossInclude": [
+            "${workspaceFolder}/hw/inc/**"  ,"${workspaceFolder}/hw/*/inc/**"  ,
+            "${workspaceFolder}/cpu/inc/**" ,"${workspaceFolder}/cpu/*/inc/**" ,
+            "${workspaceFolder}/arch/inc/**","${workspaceFolder}/arch/*/inc/**",
+            "${workspaceFolder}/os/inc/**"  ,"${workspaceFolder}/os/*/inc/**"
+        ]
+    },
+    "configurations": [
+        {
+            "name": "linux",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "mergeConfigurations"  :  true,
+            "includePath"          : ["${appInclude}", "${crossInclude}"],
+            "defines"              : ["PC", "I5", "X86_64", "LINUX"],
+            "compilerPath"         : "/usr/bin/x86_64-linux-gnu-g++",
+            "cStandard"            : "c11",
+            "cppStandard"          : "c++17",
+            "intelliSenseMode"     : "gcc-x64"
+        }
+    ]
+}
