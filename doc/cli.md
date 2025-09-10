@@ -12,6 +12,7 @@ github: https://github.com/ponyatov/cli
 	- virtual memory limited to 64K (16-bit code & data addressing)
 	- 32-bit [[data stack]] `D`
 	- [[return stack]] `R` limited to 255 cells
+	- stack VM used (no-op commands w/o arguments)
 - optional AOT compilation:
 	- compiled [[vm/bytecode|bytecode]] can be targeted only for execution
 		- no interactive shell & on-device compiler
